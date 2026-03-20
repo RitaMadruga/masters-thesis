@@ -3,17 +3,24 @@ name = "thesis-rita"
 version = "0.1.0"
 requires-python = ">=3.10"
 dependencies = [
-    "ipykernel>=7.2.0",
-    "jupyterlab>=4.5.5",
-    "matplotlib>=3.10.8",
     "mofax",
     "mofapy2>=0.7.3",
     "numpy>=2.2.6",
     "pandas>=2.3.3",
-    "pybiomart",
-    "rpy2",
     "scikit-learn>=1.7.2",
+    "statsmodels>=0.14.4",
+]
+
+[project.optional-dependencies]
+notebooks = [
+    "ipykernel>=7.2.0",
+    "jupyterlab>=4.5.5",
+    "matplotlib>=3.10.8",
     "seaborn>=0.13.2",
     "umap-learn",
-    "statsmodels>=0.14.4",
+]
+
+preprocessing = [
+    "pybiomart",
+    "rpy2",
 ]
