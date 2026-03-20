@@ -1,8 +1,7 @@
 from mofapy2.run.entry_point import entry_point
 import pandas as pd
-import numpy as np
 
-mrna_data_lg2 = pd.read_csv("data/transformed_data//mrna_data_lg2.csv", index_col=0)
+mrna_data_lg2 = pd.read_csv("data/transformed_data/mrna_data_lg2.csv", index_col=0)
 mrna_data_vsn = pd.read_csv("data/transformed_data/mrna_data_vsn.csv", index_col=0)
 mirna_data_lg2 = pd.read_csv("data/transformed_data/mirna_data_lg2.csv", index_col=0)
 mirna_data_vsn = pd.read_csv("data/transformed_data/mirna_data_vsn.csv", index_col=0)
@@ -14,15 +13,24 @@ mirna_data_lg2_fs = pd.read_csv("data/feature_selection/selected_features_mirna_
 mirna_data_vsn_fs = pd.read_csv("data/feature_selection/selected_features_mirna_data_vsn.csv", index_col=0)
 meth_data_fs = pd.read_csv("data/feature_selection/selected_features_meth_data.csv", index_col=0)
 
-runs_config = {"FeatureSelected_LG": {"datasets": [mrna_data_lg2_fs, mirna_data_lg2_fs, meth_data_fs], "save_path": "../../data/latent/mofa_trained_lg2_fs.hdf5"},
-                "FeatureSelected_VSN": {"datasets": [mrna_data_vsn_fs, mirna_data_vsn_fs, meth_data_fs], "save_path": "../../data/latent/mofa_trained_vsn_fs.hdf5"},
-                "AllFeatures_LG": {"datasets": [mrna_data_lg2, mirna_data_lg2, meth_data], "save_path": "../../data/latent/mofa_trained_lg2.hdf5"},
-                "AllFeatures_VSN": {"datasets": [mrna_data_vsn, mirna_data_vsn, meth_data], "save_path": "../../data/latent/mofa_trained_vsn.hdf5"}}
+runs_config = {"FeatureSelected_LG": {"datasets": [mrna_data_lg2_fs, mirna_data_lg2_fs, meth_data_fs], "save_path": "data/latent/mofa_trained_lg2_fs.hdf5"},
+                "FeatureSelected_VSN": {"datasets": [mrna_data_vsn_fs, mirna_data_vsn_fs, meth_data_fs], "save_path": "data/latent/mofa_trained_vsn_fs.hdf5"},
+                "AllFeatures_LG": {"datasets": [mrna_data_lg2, mirna_data_lg2, meth_data], "save_path": "data/latent/mofa_trained_lg2.hdf5"},
+                "AllFeatures_VSN": {"datasets": [mrna_data_vsn, mirna_data_vsn, meth_data], "save_path": "data/latent/mofa_trained_vsn.hdf5"}}
 
 for run_name, config in runs_config.items():
 
     mrna, mirna, meth = config["datasets"]
     save_path = config["save_path"]
+
+    common_samples = mrna.index.intersection(mirna.index).intersection(meth.index)
+
+    if common_samples.empty:
+        raise ValueError(f"No common samples found for run {run_name}")
+
+    mrna = mrna.loc[common_samples]
+    mirna = mirna.loc[common_samples]
+    meth = meth.loc[common_samples]
 
     ent = entry_point()
     data_matrix = [[mrna.values], [mirna.values], [meth.values]]
