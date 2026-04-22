@@ -1,4 +1,4 @@
-# Thesis Rita: Multi-Omics Integration and Tumor Subtype Classification in TCGA-PAAD
+# Multi-Omics Integration and Tumor Subtype Classification in TCGA-PAAD
 
 ## Introduction
 
@@ -38,8 +38,8 @@ After downloading it, place the `data/` folder in the project root as follows:
 ```text
 thesis_rita/
 ├── data/
-├── src/
 ├── notebooks/
+├── src/
 ├── pyproject.toml
 ├── uv.lock
 └── README.md
